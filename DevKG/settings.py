@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'Devapp',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -45,7 +44,6 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     "drf_yasg",
-    'django_filters',
     'Devapp',
 ]
 

@@ -31,7 +31,6 @@ class OrganizationSerializers(ModelSerializer):
             'id',
             'image','name','description','web_site',
             'vacancies_p', 'videos_p', 'events_p',
-        
         ]
 
 
@@ -46,7 +45,6 @@ class OrganizationDetailSerializers(ModelSerializer):
             'id',
             'image','name','description','web_site',
             'vacancies', 'videos', 'events',
-        
         ]
 
 

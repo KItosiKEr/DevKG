@@ -18,16 +18,15 @@ class VacanciesView(ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, ]
 
 class EventsView(ModelViewSet):
-    queryset = Events.objects.all()
+    queryset = Events.objects.order_by('when').all()
     serializer_class = EventsSerializers
     permission_classes = [IsAuthenticatedOrReadOnly, ]
 
 class VideoView(ModelViewSet):
-    queryset = Video.objects.order_by('published_date')
+    queryset = Video.objects.order_by('published_date').all()
     serializer_class = VideoSerializers
     permission_classes = [IsAuthenticatedOrReadOnly, ]
-    # filter_backends = [DjangoFilterBackend]
-    # filter_fields = ['date']
+   
 
 
 

@@ -29,7 +29,7 @@ class Organization(models.Model):
 class Events(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='events')
     title = models.TextField()
-    when = models.TextField()
+    when = models.DateTimeField(blank=True, null=True)
     organizer = models.CharField(max_length=20)
     location = models.TextField()
     description = models.TextField(blank=True)
@@ -52,13 +52,6 @@ class Video(models.Model):
     video = models.FileField(upload_to='upload_location', blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
-
-    def publish(self):
-            self.published_date = timezone.now()
-            self.save()
-
-    def __unicode__(self):
-        return self.title
 
     class Meta:
         verbose_name = 'Видео'
