@@ -17,18 +17,18 @@ class VacanciesView(ModelViewSet):
     serializer_class = VacanciesSerializers
     permission_classes = [IsAuthenticatedOrReadOnly, ]
 
+
 class EventsView(ModelViewSet):
     queryset = Events.objects.order_by('when').all()
     serializer_class = EventsSerializers
     permission_classes = [IsAuthenticatedOrReadOnly, ]
 
+
 class VideoView(ModelViewSet):
-    queryset = Video.objects.order_by('published_date').all()
+    queryset = Video.objects.order_by('created_date').all()
     serializer_class = VideoSerializers
     permission_classes = [IsAuthenticatedOrReadOnly, ]
    
-
-
 
 class OrganizationView(ModelViewSet):
     queryset = Organization.objects.all()
