@@ -10,13 +10,32 @@ from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Vacancies, Events, Video, Organization
 from rest_framework import generics
+from django.http import HttpResponse  
+from django.core.mail import send_mail
+from django.conf import settings
+from rest_framework import filters
+       
+def my_mail(request):  
+        subject = "Greetings from Programink"  
+        msg     = "Learn Django at Programink.com"  
+        to      = "hello@programink.com"  
+        res     = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])  
+        if(res == 1):  
+            msg = "Mail Sent Successfully."  
+        else:  
+            msg = "Mail Sending Failed."  
+        return HttpResponse(msg)  
 
 
 class VacanciesView(ModelViewSet):
     queryset = Vacancies.objects.all()
     serializer_class = VacanciesSerializers
     permission_classes = [IsAuthenticatedOrReadOnly, ]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['company', 'email']
 
+
+    
 
 class EventsView(ModelViewSet):
     queryset = Events.objects.order_by('when').all()
@@ -34,7 +53,7 @@ class OrganizationView(ModelViewSet):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializers
     permission_classes = [IsAuthenticatedOrReadOnly, ]
-
+#функция для просмотра делатьной информации 
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return OrganizationDetailSerializers

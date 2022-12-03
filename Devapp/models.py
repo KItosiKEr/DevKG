@@ -1,18 +1,17 @@
-from ast import Or
-from random import choices
-import re
-from tabnanny import verbose
+import signal
 from django.db import models
 from transliterate import translit
 from django.utils import timezone
 from .conf import *
+from django.dispatch import receiver
 
 
 class Organization(models.Model):
-    image = models.ImageField(upload_to='YouTube.IM/%Y/%m',)
+    image = models.ImageField(upload_to='YouTube.IM/%Y/%m',blank=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    web_site = models.CharField(max_length=100)
+    web_site = models.CharField(max_length=100) 
+#агригации для счёта и отображения организации
 
     @property
     def events_p(self):
@@ -25,7 +24,6 @@ class Organization(models.Model):
     @property
     def videos_p(self):
         return self.videos.count()
-
 
 
 class Events(models.Model):
@@ -46,7 +44,6 @@ def upload_location(instance,filename):
   return "%s/%s" %('video',translit('video','ru',reversed=True))
 
 
-
 class Video(models.Model):
     organization1 = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='videos')
     title = models.TextField(verbose_name='название')
@@ -54,7 +51,7 @@ class Video(models.Model):
     video = models.FileField(upload_to='upload_location', blank=True, null=True, verbose_name='видео')
     created_date = models.DateTimeField(default=timezone.now, verbose_name='дата создания')
     published_date = models.DateTimeField(blank=True, null=True, verbose_name='дата публикации')
-
+    
     class Meta:
         verbose_name = 'Видео'
         verbose_name_plural = 'Видео'
@@ -74,6 +71,18 @@ class Vacancies(models.Model):
         verbose_name = 'Вакансия'
         verbose_name_plural = 'Вакансии'
     # organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='vacancies')
+class SendMail(models.Model):
+    full_name = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    message = models.TextField(blank=True, null=True)
+    phone_number = models.CharField(max_length=255)
+    date = models.DateTimeField(auto_now_add=True)
 
-
-# Create your models here.
+    def __str__(self):
+        return f'{self.email} -- {self.date}'
+# @receiver(signal,  sender=Vacancies)
+# def create_vacancy(sender, instance, created, **kwargs):
+#     from Devapp.send_mail import send_msg_vacancy
+#     if created:
+#         send_msg_vacancy(instance.type_work, instance.salary, instance.currency)
+# # Create your models here.

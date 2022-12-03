@@ -1,6 +1,5 @@
-from dataclasses import field, fields
 from rest_framework.serializers import ModelSerializer
-from .models import Vacancies, Events, Video, Organization
+from .models import Vacancies, Events, Video, Organization, SendMail
 
 
 class VacanciesSerializers(ModelSerializer):
@@ -38,7 +37,7 @@ class OrganizationDetailSerializers(ModelSerializer):
     vacancies = VacanciesSerializers(read_only=True, many=True)
     videos = VideoSerializers(read_only=True, many=True)
     events = EventsSerializers(read_only=True, many=True)
-
+# поля для детального просмотра
     class Meta:
         model = Organization
         fields = [
@@ -47,7 +46,19 @@ class OrganizationDetailSerializers(ModelSerializer):
             'vacancies', 'videos', 'events',
         ]
 
-
+class SendMailSerializer(ModelSerializer):
+    class Meta:
+        model = SendMail
+        fields = ('full_name', 'email', 'message', 'phone_number', 'date')
+        read_only_fields = ('date',)
+        
+    def create(self, validated_data):
+        send_mail_to_email.delay(
+            validated_data['full_name'],
+            validated_data['email'],
+            validated_data['message'],
+            validated_data['phone_number'])
+        return super().create(validated_data)
 
 
 # class CompanySerializers(ModelSerializer):
