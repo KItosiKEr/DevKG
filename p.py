@@ -3,8 +3,8 @@ import smtplib
 # from email.mime.text import MIMEText
 
 def send_mail(message):
-    sender = "kistnikita@gmail.com"
-    password = "58109109Nk"
+    sender = ""
+    password = ""
 
     server = smtplib.SMTP("smtp.gmail.com", 2525)
     server.starttls()
